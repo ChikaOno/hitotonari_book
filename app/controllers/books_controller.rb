@@ -29,13 +29,11 @@ class BooksController < ApplicationController
     @book = Book.find(params[:id])
   end
 
-  def update　# base_periodsの作成のため分岐
+  def update　
     @book = Book.find(params[:id])
     if params[:xxx] == "yyy"
-      #base_period.nameへの分岐条件を書く
       @book = Book.find(params[:id])
-      #必要に応じて追加
-        if @book.update(base_periods_params) # base_periods_paramsに
+        if @book.update(base_periods_params) 
           flash[:success] = 'period.name は正常に更新されました'
           @base_periods = BasePeriod.where(book_id: @book.id)
           redirect_to new_contents_base_periods_path(base_period_id: @base_periods.ids, book_id: @book.id)
@@ -44,20 +42,17 @@ class BooksController < ApplicationController
           render :edit
         end
     elsif params[:xxx] == "zzz"
-    #base_period.contentへの分岐条件を書く
       @book = Book.find(params[:id])
-      #必要に応じて追加
-        if @book.update(base_periods_params) # base_periods_paramsに
+        if @book.update(base_periods_params) 
           flash[:success] = 'period.content は正常に更新されました'
           @base_periods = BasePeriod.where(book_id: @book.id)
-          redirect_to new_whole_answer_path(book_id: @base_period.book_id)
+          redirect_to new_whole_answer_path(book_id: @book.id)
         else
           flash.now[:danger] = 'period.content は更新されませんでした'
           render :edit
         end
     else
-    #普通にbookの更新処理を書く
-        if @book.update(book_params) # base_periods_paramsに
+        if @book.update(book_params) 
           flash[:success] = 'Book は正常に更新されました'
           redirect_to @book
         else

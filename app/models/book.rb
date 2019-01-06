@@ -1,12 +1,19 @@
 class Book < ApplicationRecord
  
-  #Modelの関係づけ
+  # Modelの関係づけ
   belongs_to :user
   has_many :whole_answers
   has_many :base_periods
-  accepts_nested_attributes_for :base_periods, allow_destroy: true
   
-  #バリデーション
+  # ネスト 
+  accepts_nested_attributes_for :base_periods, allow_destroy: true, reject_if: :reject_base_period
+  
+  # バリデーション
   validates :name, presence: true, length:{ maximum:50 }
+  
+  # nameフォームが空白だった項目についてはにINSERT処理が始まらないように設定
+  def reject_base_period(attributed)
+    attributed['name'].blank?
+  end
  
 end
