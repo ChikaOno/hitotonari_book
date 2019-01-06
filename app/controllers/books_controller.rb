@@ -29,36 +29,36 @@ class BooksController < ApplicationController
     @book = Book.find(params[:id])
   end
 
-  def update　
+  def update
     @book = Book.find(params[:id])
     if params[:xxx] == "yyy"
       @book = Book.find(params[:id])
-        if @book.update(base_periods_params) 
-          flash[:success] = 'period.name は正常に更新されました'
-          @base_periods = BasePeriod.where(book_id: @book.id)
-          redirect_to new_contents_base_periods_path(base_period_id: @base_periods.ids, book_id: @book.id)
-        else
-          flash.now[:danger] = 'period.name は更新されませんでした'
-          render :edit
-        end
+      if @book.update!(base_periods_params) 
+        flash[:success] = 'period.name は正常に更新されました'
+        @base_periods = BasePeriod.where(book_id: @book.id)
+        redirect_to new_contents_base_periods_path(base_period_id: @base_periods.ids, book_id: @book.id)
+      else
+        flash.now[:danger] = 'period.name は更新されませんでした'
+        render :edit
+      end
     elsif params[:xxx] == "zzz"
       @book = Book.find(params[:id])
-        if @book.update(base_periods_params) 
-          flash[:success] = 'period.content は正常に更新されました'
-          @base_periods = BasePeriod.where(book_id: @book.id)
-          redirect_to new_whole_answer_path(book_id: @book.id)
-        else
-          flash.now[:danger] = 'period.content は更新されませんでした'
-          render :edit
-        end
+      if @book.update(base_periods_params) 
+        flash[:success] = 'period.content は正常に更新されました'
+        @base_periods = BasePeriod.where(book_id: @book.id)
+        redirect_to new_whole_answer_path(book_id: @book.id)
+      else
+        flash.now[:danger] = 'period.content は更新されませんでした'
+        render :edit
+      end
     else
-        if @book.update(book_params) 
-          flash[:success] = 'Book は正常に更新されました'
-          redirect_to @book
-        else
-          flash.now[:danger] = 'Book は更新されませんでした'
-          render :edit   
-        end
+      if @book.update(book_params) 
+        flash[:success] = 'Book は正常に更新されました'
+        redirect_to @book
+      else
+        flash.now[:danger] = 'Book は更新されませんでした'
+        render :edit   
+      end
     end
   end
 
@@ -84,3 +84,11 @@ class BooksController < ApplicationController
   end
 
 end
+
+
+
+
+
+
+
+

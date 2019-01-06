@@ -1,11 +1,11 @@
 <!-- whole_answers#new -->
 
 <div class="container contents-wrapper">
-  <h2><%= @whole_questions.first.content %></h2>
+  <h2><%= @whole_question.content %></h2>
   
   
-  <p><%= @whole_questions.first.detailed_questions.find(1).content %></p>
-  <p><%= @whole_questions.first.detailed_questions.find(2).content %></p>
+  <p><%= @whole_question.detailed_questions[0].content %></p>
+  <p><%= @whole_question.detailed_questions[1].content %></p>
   
   <%= form_for(@whole_answer, url: {action: :create}) do |f| %>
   <%= render 'layouts/error_messages', model: f.object %>

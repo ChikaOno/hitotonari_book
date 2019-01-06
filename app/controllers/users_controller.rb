@@ -5,6 +5,10 @@ class UsersController < ApplicationController
     @users = User.all.page(params[:page])
   end
   
+  # 友達検索機能をここに書く
+  def search
+  end
+  
   def show
     @user = User.find(params[:id])
   end

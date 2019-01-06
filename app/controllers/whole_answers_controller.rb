@@ -13,25 +13,44 @@ class WholeAnswersController < ApplicationController
     @book = Book.find(params[:book_id])
     @whole_answer = Book.find(params[:book_id]).whole_answers.build
     
-    # whole_questionsを持っておいて、１個ずつ減らしていく
-    @whole_questions = WholeQuestion.where(required: true)
-    @whole_answer.whole_question = @whole_questions.first
-    @detailed_answers = Array.new
-    @whole_questions.first.detailed_questions.each do |detailed_question|
-    @whole_answer.detailed_answers.build(detailed_question_id: detailed_question.id)
+    if params[:whole_question_id].blank?
+      # whole_questionsを持っておいて、１個ずつ減らしていく
+      @whole_question = WholeQuestion.where(required: true).first
+      @whole_answer.whole_question = @whole_question
+      @detailed_answers = Array.new
+      @whole_question.detailed_questions.each do |detailed_question|
+        @whole_answer.detailed_answers.build(detailed_question_id: detailed_question.id)
+      end
+
+      # base_periodの選択部分
+      @base_periods = BasePeriod.where(book_id: @book.id)
+      @whole_answer.periods.build
+    else
+      # whole_questionsを持っておいて、１個ずつ減らしていく
+      @whole_question = WholeQuestion.find_by(id: params[:whole_question_id])
+      @whole_answer.whole_question = @whole_question
+      @detailed_answers = Array.new
+      @whole_question.detailed_questions.each do |detailed_question|
+        @whole_answer.detailed_answers.build(detailed_question_id: detailed_question.id)
+      end
+
+      # base_periodの選択部分
+      @base_periods = BasePeriod.where(book_id: @book.id)
+      @whole_answer.periods.build
     end
-    
-    # base_periodの選択部分
-    @base_periods = BasePeriod.where(book_id: @book.id)
-    @whole_answer.periods.build
-    
   end
 
   def create
     @whole_answer = Book.find(params[:book_id]).whole_answers.build(detailed_answer_params)
     if @whole_answer.save
-      flash[:success] = '回答を保存しました。'
-      redirect_to root_url
+      if params[:whole_answer][:whole_question_id].to_i == WholeQuestion.where(required: true).last.id
+        flash[:success] = '回答を保存しました。'
+        redirect_to root_url
+      else
+        whole_questions = WholeQuestion.where(required: true)
+        id_of_next_whole_question = whole_questions[whole_questions.index { |k| k.id == params[:whole_answer][:whole_question_id].to_i} + 1].id
+        redirect_to new_whole_answer_path(whole_question_id: id_of_next_whole_question, book_id: params[:book_id])
+      end
     else
       flash.now[:danger] = '回答保存に失敗しました。'
       render 'toppages/index'

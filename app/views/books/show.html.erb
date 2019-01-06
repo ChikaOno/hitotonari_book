@@ -3,35 +3,37 @@
 <div class="container contents-wrapper">
 	<h1>id: <%= @book.id %> の人となりBook詳細ページ</h1>
 
-	
-	<!-- bookblockを使って本デザイン表示(サンプル)ここから-->
-	  <div class="bb-custom-wrapper">
+  <hr/>
+	<!-- bookblockを使って本デザイン表示-->
+		<div class="bb-custom-wrapper">
 			<div id="bb-bookblock" class="bb-bookblock">
-				<div class="bb-item">
-					<p>はじめまして</p>
-				</div>
-				<div class="bb-item">
-					<p>おはようございます</p>
-				</div>
-				<div class="bb-item">
-					<p>こんにちは</p>
-				</div>
-				<div class="bb-item">
-					<p>こんばんは</p>
-				</div>
-				<div class="bb-item">
-					<p>おやすみなさい</p>
-				</div>
+	      <% @book.base_periods.order(:id).each do |base_period| %>
+	        <div class="bb-item">
+	          <h2><%= base_period.name %></h2>
+	          <p><%= base_period.content %></p>
+				  </div>
+	        <% base_period.whole_answers.each do |whole_answer| %>
+	          <% whole_answer.detailed_answers.each do |detailed_answer| %>
+	            <div class="bb-item">
+	              <ul>
+	                <li><%= detailed_answer.detailed_question.content %></li>
+	                <li><%= base_period.name %></li>
+	                <li><%= detailed_answer.content %></li>
+	              </ul>
+				      </div>
+	          <% end %>
+	        <% end %>
+	      <% end %>
 			</div>
+			
 			<nav>
 				<a id="bb-nav-first" href="#" class="bb-custom-icon bb-custom-icon-first">First page</a>
 				<a id="bb-nav-prev" href="#" class="bb-custom-icon bb-custom-icon-arrow-left">Previous</a>
 				<a id="bb-nav-next" href="#" class="bb-custom-icon bb-custom-icon-arrow-right">Next</a>
 				<a id="bb-nav-last" href="#" class="bb-custom-icon bb-custom-icon-last">Last page</a>
 			</nav>
+			
 		</div>
-	<!-- bookblockを使って本デザイン表示（試行錯誤）ここまで-->
-	
 	
 	<p><%= @book.name %></p>
 	<img class="media-object img-rounded" src="<%= @book.book_photo %>" alt="">

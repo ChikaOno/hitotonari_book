@@ -10,7 +10,11 @@ Rails.application.routes.draw do
   
   #アカウント作成・編集・削除
   get 'signup', to: 'users#new'
-  resources :users
+  resources :users do
+    collection do
+      get :search
+    end
+  end
   
   #Book作成
   resources :books

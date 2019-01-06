@@ -13,7 +13,12 @@ class Book < ApplicationRecord
   
   # nameフォームが空白だった項目についてはにINSERT処理が始まらないように設定
   def reject_base_period(attributed)
-    attributed['name'].blank?
+    if attributed['name'].blank?
+      if attributed['content'].present?
+        return false
+      end
+      return true
+    end
   end
  
 end
